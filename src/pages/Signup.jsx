@@ -204,10 +204,8 @@ const Signup = () => {
 
     return (
         <div className="flex flex-col bg-slate-100">
-            <div className="flex flex-col bg-slate-100"></div>
-            <div className="login-pg my-16 flex flex-col items-center">
-                <h1 className="text-center text-2xl font-bold">NSS Portal</h1>
-                <div className="login-section mt-4 w-2/6 rounded-lg border border-solid bg-white p-4">
+            <div className="login-pg my-8 flex flex-col items-center">
+                <div className="login-section mt-4 w-1/4 rounded-lg border border-solid bg-white px-4 py-6">
                     <form
                         onSubmit={signupHandler}
                         className="flex flex-col gap-6"
@@ -351,7 +349,6 @@ const Signup = () => {
                                 onBlur={() => fieldBlur("userType")}
                             >
                                 <option className="hidden" value=""></option>
-                                <option value="admin">Admin</option>
                                 <option value="volunteer">Volunteer</option>
                                 <option value="user">User</option>
                             </select>
@@ -381,7 +378,7 @@ const Signup = () => {
                             </p>
                         )}
                     </form>
-                    <p className="text-center text-sm text-slate-600">
+                    <p className="mt-3 text-center text-sm text-slate-600">
                         Already have an account?
                         <Link to={"/login"}> Login!</Link>
                     </p>
