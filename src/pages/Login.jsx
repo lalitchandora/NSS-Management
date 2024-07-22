@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 
 import authService from "../services/auth.service";
 
@@ -8,6 +8,7 @@ const Login = () => {
     const [pwd, setPwd] = useState("");
     const [error, setError] = useState({ email: "", pwd: "", form: "" });
     const [touched, setTouched] = useState({ email: false, pwd: false });
+    const navigate = useNavigate();
 
     const loginHandler = async (event) => {
         event.preventDefault();
@@ -17,6 +18,9 @@ const Login = () => {
                 form: "",
             }));
             const res = await authService.login(email, pwd);
+            console.log(res, "ih");
+            // redirect("/admin");
+            navigate("/admin");
         } catch (error) {
             setError((prevError) => ({
                 ...prevError,
@@ -93,11 +97,9 @@ const Login = () => {
     };
 
     return (
-        <div className="flex flex-col bg-slate-100">
-            <div className="flex flex-col bg-slate-100"></div>
-            <div className="login-pg my-16 flex flex-col items-center">
-                <h1 className="text-center text-2xl font-bold">NSS Portal</h1>
-                <div className="login-section mt-4 w-2/6 rounded-lg border border-solid bg-white p-4">
+        <div className="flex flex-col">
+            <div className="login-pg my-8 flex flex-col items-center">
+                <div className="login-section mt-4 w-1/4 rounded-lg border border-solid bg-white px-4 py-6">
                     <form
                         onSubmit={loginHandler}
                         className="flex flex-col gap-6"
@@ -177,7 +179,7 @@ const Login = () => {
                             </p>
                         )}
                     </form>
-                    <p className="text-center text-sm text-slate-600">
+                    <p className="mt-3 text-center text-sm text-slate-600">
                         Don't have an account?
                         <Link to={"/signup"}> Signup!</Link>
                     </p>

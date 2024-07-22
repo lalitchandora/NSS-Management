@@ -1,17 +1,14 @@
-import { useState } from 'react'
-import './App.css'
+import { Outlet } from "react-router-dom";
+import "./App.css";
+import Nav from "./components/Nav";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <h1>Vite + React</h1>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
-    </>
-  )
+    return (
+        <div className="h-screen bg-slate-100">
+            <Nav />
+            <Outlet />
+        </div>
+    );
 }
 
-export default App
+export default App;
