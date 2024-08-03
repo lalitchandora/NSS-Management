@@ -40,10 +40,11 @@ const Signup = () => {
                 user_type: data.userType,
             };
             const response = await authService.signup(signupData);
+            console.log('Signup successful', response);
         } catch (error) {
             setError((prevError) => ({
                 ...prevError,
-                form: error.error,
+                form: error.error || "An error occurred during signup",
             }));
         }
     };
