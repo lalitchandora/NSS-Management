@@ -23,6 +23,7 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
+    // console.log('intercept', error);
     if (error.response && error.response.status === 401) {
       // Unauthorized, clear the token and redirect to login
       authService.logout();

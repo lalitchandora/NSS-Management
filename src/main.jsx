@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import 'aos/dist/aos.css';  // Import AOS styles
-import AOS from 'aos';
+import "aos/dist/aos.css"; // Import AOS styles
+import AOS from "aos";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
@@ -14,6 +14,11 @@ import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import EventAdmin from "./pages/admin/events.admin.jsx";
 import CommunityPosts from "./pages/CommunityPosts.jsx";
+import Events from "./pages/Events.jsx";
+import SingleEvent from "./pages/SingleEvent.jsx";
+import Profile from "./pages/Profile.jsx";
+import AuthProvider from "./services/authProvider.jsx";
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -24,28 +29,40 @@ const router = createBrowserRouter([
                 element: <Home />,
             },
             {
-                path: "/home",
+                path: "home",
                 element: <Home />,
             },
             {
-                path: "/about",
+                path: "events",
+                element: <Events />,
+            },
+            {
+                path: "events/:id",
+                element: <SingleEvent />,
+            },
+            {
+                path: "about",
                 element: <About />,
-            }, 
+            },
             {
-                path: "/contact",
-                element: <Contact/>,
-            }, 
+                path: "contact",
+                element: <Contact />,
+            },
             {
-                path: "/community",
+                path: "community",
                 element: <CommunityPosts />,
             },
             {
-                path: "/login",
+                path: "login",
                 element: <Login />,
             },
             {
-                path: "/signup",
+                path: "signup",
                 element: <Signup />,
+            },
+            {
+                path: "profile",
+                element: <Profile />,
             },
         ],
     },
@@ -70,9 +87,11 @@ const router = createBrowserRouter([
 ]);
 AOS.init({
     duration: 1200,
-  });
+});
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
     </React.StrictMode>,
 );

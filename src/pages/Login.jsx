@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
 
 import authService from "../services/auth.service";
+import AuthContext from "../services/authContext";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -9,16 +10,20 @@ const Login = () => {
     const [error, setError] = useState({ email: "", pwd: "", form: "" });
     const [touched, setTouched] = useState({ email: false, pwd: false });
     const navigate = useNavigate();
+    const { user, setUser } = useContext(AuthContext);
 
     const loginHandler = async (event) => {
         event.preventDefault();
+
         try {
             setError((prevError) => ({
                 ...prevError,
                 form: "",
             }));
             const res = await authService.login(email, pwd);
-            console.log(res, "ih");
+            const userData = await authService.getCurrentUser();
+            setUser(userData);
+            console.log(userData, "ih");
             // redirect("/admin");
             navigate("/admin");
         } catch (error) {
