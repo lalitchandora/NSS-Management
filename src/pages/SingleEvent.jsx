@@ -156,7 +156,7 @@ const SingleEvent = () => {
                         </div>
                     </div>
 
-                    <div className="mb-8">
+                    {/* <div className="mb-8">
                         <h3 className="mb-4 text-3xl font-semibold text-blue-800">
                             Gallery
                         </h3>
@@ -178,8 +178,34 @@ const SingleEvent = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
-
+                    </div> */}
+                    <div className="mb-8">
+    <h3 className="mb-4 text-3xl font-semibold text-blue-800">
+        Gallery
+    </h3>
+    {event.images && event.images.length > 0 ? (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {event.images.map((image, index) => (
+                <div
+                    key={index}
+                    className="group relative transform overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
+                >
+                    <img
+                        src={encodeURI(
+                            "http://localhost:3000/uploads/" +
+                                image.image
+                        )}
+                        alt={`Event image ${index + 1}`}
+                        className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black opacity-40 transition-opacity duration-300 group-hover:opacity-10"></div>
+                </div>
+            ))}
+        </div>
+    ) : (
+        <p className="text-lg text-gray-600">No images available for this event.</p>
+    )}
+</div>
                     {user &&
                         (user.user_type === "admin" ||
                             user.user_type === "volunteer") && (

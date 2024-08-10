@@ -65,6 +65,7 @@ const EventAdmin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');  // Clear any previous errors
         try {
             let res;
             if (action === 'add') {
@@ -74,12 +75,15 @@ const EventAdmin = () => {
             } else if (action === 'delete' && selectedEvent) {
                 res = await axios.delete(`http://localhost:3000/api/events/delete/${selectedEvent._id}`);
             }
-            if (res.status === 201 || res.status === 200) {
-                setError('');
+    
+            if (res && res.status === 201 || res.status === 200) {
                 navigate('/admin');
+            } else {
+                setError('Unexpected response from server');
             }
         } catch (error) {
-            setError(error.response.data.error);
+            console.error('Error in handleSubmit:', error);
+            setError(error.response?.data?.error || 'An error occurred while processing your request');
         }
     };
 
@@ -197,9 +201,24 @@ const EventAdmin = () => {
                                     onChange={handlePhotoChange}
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
+                               
+                                {/* {formData.photo && (
+                                    <img 
+                                        src={`http://localhost:3000/uploads/${formData.photo}`} 
+                                        alt="Event" 
+                                        className="mt-2 h-32 w-32 object-cover" 
+                                    />
+                                )} */}
                                 {formData.photo && (
-                                    <img src={formData.photo} alt="Event" className="mt-2 h-32 w-32 object-cover" />
-                                )}
+  <img 
+    src={typeof formData.photo === 'string' 
+      ? `http://localhost:3000/uploads/${formData.photo}`
+      : URL.createObjectURL(formData.photo)
+    } 
+    alt="Event" 
+    className="mt-2 h-32 w-32 object-cover" 
+  />
+)}
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Description</label>
