@@ -1,156 +1,122 @@
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import httpService from '../../services/http.service';
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function HomeAdmin() {
+const HomeAdmin = () => {
+    const [events, setEvents] = useState([]);
+    const [volunteers, setVolunteers] = useState([]);
+    const [loadingEvents, setLoadingEvents] = useState(true);
+    const [loadingVolunteers, setLoadingVolunteers] = useState(true);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const eventRes = await httpService.get('events/all');
+                setEvents(eventRes.data.eventsArr || []);
+                setLoadingEvents(false);
+
+                const volunteerRes = await axios.get('/profile/all'); 
+                setVolunteers(volunteerRes.data || []);
+                setLoadingVolunteers(false);
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    navigate('/login'); 
+                } else {
+                    setError('Failed to fetch data: ' + error.message);
+                    setLoadingEvents(false);
+                    setLoadingVolunteers(false);
+                }
+            }
+        };
+        fetchData();
+    }, [navigate]);
+
+    const totalEvents = events.length;
+    const totalVolunteers = volunteers.length;
+
+    if (loadingEvents || loadingVolunteers) return <div className="text-center text-lg">Loading...</div>;
+    if (error) return <div className="text-center text-red-500">{error}</div>;
+
     return (
-        <div className="h-full w-full pt-4">
-            <div className="stats-section ml-8 flex justify-start gap-8">
-                <div className="totalreg rounded-lg border border-slate-200 bg-white p-4 shadow-xl">
-                    <h4 className="title text-center text-sm">
-                        Total Registered
-                    </h4>
-                    <h2 className="text-center text-2xl font-semibold">32</h2>
-                </div>
-                <div className="totalevents rounded-lg border border-slate-200 bg-white p-4 shadow-xl">
-                    <h4 className="title text-center text-sm">
-                        Total Events Done
-                    </h4>
-                    <h2 className="text-center text-2xl font-semibold">12</h2>
+        <div className="h-full w-full p-8">
+            <h2 className="mb-4 text-2xl font-bold">Admin Dashboard</h2>
+            <div className="mb-6 bg-white p-6 rounded-lg shadow-lg">
+                <h3 className="text-xl font-semibold mb-2">Totals</h3>
+                <div className="flex space-x-4">
+                    <div className="flex-1 bg-blue-100 p-4 rounded-lg shadow-md">
+                        <p className="text-lg font-medium">Total Events</p>
+                        <p className="text-2xl font-bold">{totalEvents}</p>
+                    </div>
+                    <div className="flex-1 bg-green-100 p-4 rounded-lg shadow-md">
+                        <p className="text-lg font-medium">Total Volunteers</p>
+                        <p className="text-2xl font-bold">{totalVolunteers}</p>
+                    </div>
                 </div>
             </div>
-            <div className="events-section m-4 ml-8 rounded-lg bg-white py-4 shadow-xl">
-                <h2 className="title text-md text-md pb-3 pl-4 font-bold">
-                    Ongoing Events
-                </h2>
-                <table className="ml-4 w-full text-left">
-                    <tr className="font-light">
-                        <th className="py-2 text-left text-sm font-medium text-gray-400">
-                            Name
-                        </th>
-                        <th className="text-sm font-medium text-gray-400">
-                            Type
-                        </th>
-                        <th className="text-sm font-medium text-gray-400">
-                            Hours
-                        </th>
-                        <th className="text-sm font-medium text-gray-400">
-                            Location
-                        </th>
-                        <th className="text-sm font-medium text-gray-400">
-                            Volunteers
-                        </th>
-                    </tr>
-                    <tr>
-                        <th className="py-1 text-sm font-medium">
-                            <Link
-                                className="hover:underline"
-                                to={"/admin/events/101"}
-                            >
-                                Blood Donation Drive
-                            </Link>
-                        </th>
-                        <th className="text-sm font-medium">Long Event</th>
-                        <th className="text-sm font-medium">4 hrs</th>
-                        <th className="text-sm font-medium">Andheri, Mumbai</th>
-                        <th className="text-sm font-medium">12</th>
-                    </tr>
-                    <tr>
-                        <th className="py-1 text-sm font-medium">
-                            <Link
-                                className="hover:underline"
-                                to={"/admin/events/101"}
-                            >
-                                Community Clean-Up
-                            </Link>
-                        </th>
-                        <th className="text-sm font-medium">Medium Event</th>
-                        <th className="text-sm font-medium">3 hrs</th>
-                        <th className="text-sm font-medium">
-                            Juhu Beach, Mumbai
-                        </th>
-                        <th className="text-sm font-medium">30</th>
-                    </tr>
-                    <tr>
-                        <th className="py-1 text-sm font-medium">
-                            <Link
-                                className="hover:underline"
-                                to={"/admin/events/101"}
-                            >
-                                Food Distribution
-                            </Link>
-                        </th>
-                        <th className="text-sm font-medium">Short Event</th>
-                        <th className="text-sm font-medium">2 hrs</th>
-                        <th className="text-sm font-medium">Dadar, Mumbai</th>
-                        <th className="text-sm font-medium">23</th>
-                    </tr>
-                </table>
+            <div className="mb-6">
+                <h3 className="text-xl font-semibold">Events</h3>
+                <button
+                    onClick={() => document.getElementById('eventList').classList.toggle('hidden')}
+                    className="mb-4 rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                >
+                    View Events List
+                </button>
+                <ul id="eventList" className="hidden mt-4 space-y-4">
+                    {events.length > 0 ? (
+                        events.map(event => (
+                            <li key={event._id} className="p-4 border rounded-lg shadow-sm bg-white">
+                                <h4 className="text-lg font-semibold">{event.title}</h4>
+                                <p>Date: {moment(event.dateTime).format('MMMM Do YYYY, h:mm A')}</p>
+                                <p>Location: {event.location}</p>
+                                <p>Description: {event.description}</p>
+                            </li>
+                        ))
+                    ) : (
+                        <p>No events found.</p>
+                    )}
+                </ul>
             </div>
-
-            <div className="events-section m-4 ml-8 rounded-lg bg-white py-4 shadow-xl">
-                <h2 className="title text-md text-md pb-3 pl-4 font-bold">
-                    New Requests
-                </h2>
-                <table className="ml-4 w-4/5 border-separate text-left">
-                    <tr className="font-light">
-                        <th className="py-2 text-left text-sm font-medium text-gray-400">
-                            Name
-                        </th>
-                        <th className="text-sm font-medium text-gray-400">
-                            Accept
-                        </th>
-                        <th className="text-sm font-medium text-gray-400">
-                            Reject
-                        </th>
-                    </tr>
-                    <tr>
-                        <th className="py-1 text-sm font-medium">
-                            Aditi Thakore
-                        </th>
-                        <th className="text-sm font-medium">
-                            <button className="rounded bg-green-500 px-2 py-1 text-white">
-                                Accept
-                            </button>
-                        </th>
-                        <th className="text-sm font-medium">
-                            <button className="rounded bg-red-500 px-2 py-1 text-white">
-                                Reject
-                            </button>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th className="py-1 text-sm font-medium">
-                            Dharmesh Mishra
-                        </th>
-                        <th className="text-sm font-medium">
-                            <button className="rounded bg-green-500 px-2 py-1 text-white">
-                                Accept
-                            </button>
-                        </th>
-                        <th className="text-sm font-medium">
-                            <button className="rounded bg-red-500 px-2 py-1 text-white">
-                                Reject
-                            </button>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th className="py-1 text-sm font-medium">
-                            Lalit Chandora
-                        </th>
-                        <th className="text-sm font-medium">
-                            <button className="rounded bg-green-500 px-2 py-1 text-white">
-                                Accept
-                            </button>
-                        </th>
-                        <th className="text-sm font-medium">
-                            <button className="rounded bg-red-500 px-2 py-1 text-white">
-                                Reject
-                            </button>
-                        </th>
-                    </tr>
-                </table>
+            <div>
+                <h3 className="text-xl font-semibold">Volunteers</h3>
+                <button
+                    onClick={() => document.getElementById('volunteerList').classList.toggle('hidden')}
+                    className="mb-4 rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                >
+                    View Volunteers List
+                </button>
+                <div id="volunteerList" className="hidden mt-4">
+                    <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                <th className="py-2 px-4 border-b">Name</th>
+                                <th className="py-2 px-4 border-b">Email</th>
+                                <th className="py-2 px-4 border-b">Total Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volunteers.length > 0 ? (
+                                volunteers.map(volunteer => (
+                                    <tr key={volunteer._id} className="hover:bg-gray-50">
+                                        <td className="py-2 px-4 border-b">{volunteer.name}</td>
+                                        <td className="py-2 px-4 border-b">{volunteer.email}</td>
+                                        <td className="py-2 px-4 border-b">{volunteer.totalHrs}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="3" className="py-2 px-4 border-b text-center">No volunteers found.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
-}
+};
 
 export default HomeAdmin;

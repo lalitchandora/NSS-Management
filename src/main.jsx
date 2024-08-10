@@ -18,7 +18,9 @@ import Events from "./pages/Events.jsx";
 import SingleEvent from "./pages/SingleEvent.jsx";
 import Profile from "./pages/Profile.jsx";
 import AuthProvider from "./services/authProvider.jsx";
-
+import CertificateAdmin from "./pages/admin/certificate.admin.jsx"
+import VolunteerList from "./pages/admin/volunteers.admin.jsx"
+import EventAttendancePage from "./pages/admin/attendance.admin.jsx"
 const router = createBrowserRouter([
     {
         path: "/",
@@ -80,8 +82,16 @@ const router = createBrowserRouter([
             },
             {
                 path: "volunteers",
-                element: <></>,
+                element: <VolunteerList/>,
             },
+            {
+                path: "certificate",
+                element:<CertificateAdmin/>
+            },
+            {
+                path: "attendance",
+                element:<EventAttendancePage/>
+            }
         ],
     },
 ]);

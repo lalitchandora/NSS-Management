@@ -29,6 +29,23 @@ const SidePanelAdmin = () => {
                             Volunteers
                         </Link>
                     </li>
+                   
+                    <li className="text-center text-white">
+                        <Link
+                            className="block py-2 hover:bg-[#131720] hover:underline"
+                            to={"/admin/attendance"}
+                        >
+                            Attendance
+                        </Link>
+                    </li>
+                    <li className="text-center text-white">
+                        <Link
+                            className="block py-2 hover:bg-[#131720] hover:underline"
+                            to={"/admin/certificate"}
+                        >
+                            Certificates
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </nav>
