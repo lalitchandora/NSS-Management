@@ -44,7 +44,9 @@ const Events = () => {
                         <div
                             key={item._id}
                             className="event-item animate-fadeInUp cursor-pointer rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg"
-                            onClick={() => redirectTo(`${item._id}`)}
+                            onClick={() =>
+                                redirectTo(`../app/events/${item._id}`)
+                            }
                         >
                             <img
                                 src={encodeURI(

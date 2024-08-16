@@ -11,11 +11,12 @@ const updateUser = async (uid, year, course) => {
 
 const getProfile = async () => {
     try {
-        const profile = await httpService.get("profile");
+        const profile = await httpService.get("profile/profile");
         if (profile.data) {
             return profile.data;
         } else return false;
     } catch (error) {
+        console.log(error, 'profile');
         return false;
     }
 }

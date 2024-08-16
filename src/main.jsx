@@ -18,9 +18,10 @@ import Events from "./pages/Events.jsx";
 import SingleEvent from "./pages/SingleEvent.jsx";
 import Profile from "./pages/Profile.jsx";
 import AuthProvider from "./services/authProvider.jsx";
-import CertificateAdmin from "./pages/admin/certificate.admin.jsx"
-import VolunteerList from "./pages/admin/volunteers.admin.jsx"
-import EventAttendancePage from "./pages/admin/attendance.admin.jsx"
+import CertificateAdmin from "./pages/admin/certificate.admin.jsx";
+import VolunteerList from "./pages/admin/volunteers.admin.jsx";
+import EventAttendancePage from "./pages/admin/attendance.admin.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -39,10 +40,6 @@ const router = createBrowserRouter([
                 element: <Events />,
             },
             {
-                path: "events/:id",
-                element: <SingleEvent />,
-            },
-            {
                 path: "about",
                 element: <About />,
             },
@@ -51,16 +48,26 @@ const router = createBrowserRouter([
                 element: <Contact />,
             },
             {
-                path: "community",
-                element: <CommunityPosts />,
-            },
-            {
                 path: "login",
                 element: <Login />,
             },
             {
                 path: "signup",
                 element: <Signup />,
+            },
+        ],
+    },
+    {
+        path: "/app",
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "events/:id",
+                element: <SingleEvent />,
+            },
+            {
+                path: "community",
+                element: <CommunityPosts />,
             },
             {
                 path: "profile",
@@ -82,16 +89,16 @@ const router = createBrowserRouter([
             },
             {
                 path: "volunteers",
-                element: <VolunteerList/>,
+                element: <VolunteerList />,
             },
             {
                 path: "certificate",
-                element:<CertificateAdmin/>
+                element: <CertificateAdmin />,
             },
             {
                 path: "attendance",
-                element:<EventAttendancePage/>
-            }
+                element: <EventAttendancePage />,
+            },
         ],
     },
 ]);

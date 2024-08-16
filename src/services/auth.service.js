@@ -72,6 +72,7 @@ const login = async (email, password) => {
 
 const logout = () => {
     localStorage.removeItem(tokenKey);
+    window.location = "/home"
 };
 
 export default {

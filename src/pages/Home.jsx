@@ -11,7 +11,7 @@ function Home() {
         <>
             <div className="App">
                 <header
-                    className="h-120 relative flex items-center justify-center text-white"
+                    className="relative flex h-120 items-center justify-center text-white"
                     style={{
                         backgroundImage:
                             "url(https://yas.tripura.gov.in/sites/default/files/inline-images/nss.jpg)",
@@ -191,7 +191,7 @@ function Home() {
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                             <div className="group relative rounded-lg bg-white p-4 shadow-lg">
                                 <img
-                                    src="https://southavenuemall.com/wp-content/uploads/2018/03/185063-bdonation.jpg"
+                                    src="https://www.nirankari.org/mumbai/events/2022/BDC/4sept01.jpg"
                                     alt="Blood Donation Camp"
                                     className="mb-4 h-40 w-full rounded-md object-contain"
                                 />

@@ -25,7 +25,7 @@ const Login = () => {
             setUser(userData);
             console.log(userData, "ih");
             // redirect("/admin");
-            navigate("/admin");
+            navigate("/");
         } catch (error) {
             setError((prevError) => ({
                 ...prevError,

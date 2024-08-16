@@ -21,7 +21,7 @@ const Nav = () => {
         },
         {
             name: "Community",
-            link: "community",
+            link: "app/community",
         },
         {
             name: "Contact",
@@ -63,7 +63,7 @@ const Nav = () => {
                 })}
             </ul>
             <div className="profile my-1.5 ml-auto flex cursor-pointer justify-center text-white">
-                {user == null ? (
+                {!user ? (
                     <button
                         className="rounded-xl bg-white bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 text-white"
                         onClick={() => redirectTo("/login")}
@@ -75,7 +75,7 @@ const Nav = () => {
                         src="/assets/profile-avatar.jpg"
                         alt="Profile"
                         className="w-12 rounded-full"
-                        onClick={() => redirectTo("/profile")}
+                        onClick={() => redirectTo("../app/profile")}
                     />
                 )}
             </div>

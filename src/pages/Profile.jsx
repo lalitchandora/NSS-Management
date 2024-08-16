@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import profileService from "../services/profile.service";
+import AuthContext from "../services/authContext";
+import authService from "../services/auth.service";
 
 const Profile = () => {
     const [name, setName] = useState("");
@@ -9,6 +11,7 @@ const Profile = () => {
     const [uid, setUid] = useState("UID12345");
     const [year, setYear] = useState("2027");
     const [course, setCourse] = useState("Computer Science");
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         profileService.getProfile().then((res) => {
@@ -24,6 +27,14 @@ const Profile = () => {
         });
     }, []);
 
+    const logout = () => {
+        authService.logout();
+    };
+
+    const update = async () => {
+        const updated = await profileService.updateUser(uid, course, year);
+    };
+
     return (
         <div className="mt-4 flex min-h-screen flex-col items-center justify-center bg-gray-100">
             <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-lg">
@@ -33,7 +44,7 @@ const Profile = () => {
                         <label className="font-medium">Name:</label>
                         <input
                             type="text"
-                            value="John Doe"
+                            value={name}
                             disabled
                             className="w-2/3 rounded-md bg-gray-200 p-2"
                         />
@@ -42,7 +53,7 @@ const Profile = () => {
                         <label className="font-medium">Email:</label>
                         <input
                             type="email"
-                            value="john.doe@example.com"
+                            value={email}
                             disabled
                             className="w-2/3 rounded-md bg-gray-200 p-2"
                         />
@@ -96,13 +107,19 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end">
-                    <button className="rounded-lg bg-gray-500 px-4 py-2 font-semibold text-white shadow hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                    <button
+                        className="rounded-lg bg-gray-500 px-4 py-2 font-semibold text-white shadow hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                        onClick={update}
+                    >
                         Update
                     </button>
                 </div>
             </div>
             <div className="my-4 flex w-full max-w-lg justify-center">
-                <button className="rounded-lg bg-red-500 px-4 py-2 font-semibold text-white shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                <button
+                    className="rounded-lg bg-red-500 px-4 py-2 font-semibold text-white shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                    onClick={logout}
+                >
                     Logout
                 </button>
             </div>

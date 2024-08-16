@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
 
 const Signup = () => {
@@ -25,6 +25,7 @@ const Signup = () => {
         confirmPassword: false,
         userType: false,
     });
+    const navigate = useNavigate();
 
     const signupHandler = async (event) => {
         event.preventDefault();
@@ -40,7 +41,8 @@ const Signup = () => {
                 user_type: data.userType,
             };
             const response = await authService.signup(signupData);
-            console.log('Signup successful', response);
+            console.log("Signup successful", response);
+            navigate("/");
         } catch (error) {
             setError((prevError) => ({
                 ...prevError,
